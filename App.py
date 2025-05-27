@@ -82,8 +82,15 @@ def register():
         return render_template("account_created.html")
     return render_template("register.html")
 
+# Log out user
+@app.route("/logout")
+def logout():
+    del session["username"]
+    del session["user_id"]
+    del session["csrf_token"]
+    return redirect("/")
 
 
-# Allows the app to run on IDE in debug mode
+# Allows the app to run in IDE terminal in debug mode
 if __name__ == "__main__":
     app.run(debug=True)
