@@ -13,6 +13,10 @@ app.secret_key = config.secret_key
 def errorpage(error_message, error_type):
     return render_template("errorpage.html", error_message=error_message, error_type=error_type)
 
+def check_csrf_token():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        return errorpage("Invalid CSRF token", "Error while processing request")
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -39,6 +43,7 @@ def login():
         if check_password_hash(user_data["hashed_password"], (password + user_data["salt"])):
             session["username"] = user_data["username"]
             session["user_id"] = user_data["id"]
+            session["csrf_token"] = token_hex(16)
             return redirect("/")
         return errorpage("Invalid Credentials", "Error while logging in")
     return render_template("login.html")
@@ -51,7 +56,7 @@ def register():
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
         email = request.form["email"]
-        salt = token_hex(10)
+        salt = token_hex(16)    # Generate a random salt for password hashing
 
         # Validate user input
         if not username or not password or not confirm_password:
