@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Create an account</title>
+</head>
+
+<body>
+  <h1>Create an account</h1>
+  <font size="4">Please fill in the form to create an account.</font><br />
+  <font size="2">The username must be at least 3 characters long and the password must be at least 8 characters long.</font>
+  <form action="/register" method="post">
+    <p>
+      Email (optional): <br />
+      <input type="text" name="email" />
+    </p>
+    <p>
+      Username: <br />
+      <input type="text" name="username" />
+    </p>
+    <p>
+      Password: <br />
+      <input type="password" name="password" />
+    </p>
+    <p>
+      Password again: <br />
+      <input type="password" name="confirm_password" />
+    </p>
+    <input type="submit" value="Create an account" />
+  </form>
+</body>
+
+</html>
