@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>New announcement</title>
+</head>
+
+<body>
+  <h1>Create a new game announcement</h1>
+  <font size="3">The spots marked with * are mandatory</font><br />
+
+  <form action="/new_announcement" method="post">
+    <p>
+      Name of the game*: <br />
+      <input type="text" name="title" />
+    </p>
+
+    <p>
+      Link to download site: <br />
+      <input type="text" name="download_link" />
+    </p>
+
+    <p>
+      Intented price: <br />
+      <input type="text" name="intented_price" /> €
+    </p>
+
+    <p>
+      Intented age restriction: <br />
+      <input type="text" name="age_restriction" />
+    </p>
+
+    <p>
+      Description*: <br />
+      <textarea name="description" rows="6" cols="60"></textarea>
+    </p>
+    <input type="submit" value="Create an announcement" />
+  </form>
+</body>
+
+</html>
+

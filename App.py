@@ -90,6 +90,36 @@ def logout():
     del session["csrf_token"]
     return redirect("/")
 
+# Render announcement creation page
+@app.route("/new_announcement", methods=["GET", "POST"])
+def new_announcement():
+    if not session.get("username"):
+        return redirect("/login")
+    if request.method == "POST":
+        title = request.form["title"]
+        description = request.form["description"]
+        intented_price = request.form["intented_price"]
+        age_restriction = request.form["age_restriction"]
+
+        # Validate user input
+        if not title or not description:
+            return "ERROR: All fields marked with * are required"
+        if intented_price:
+            if not intented_price.isdigit():
+                return "ERROR: Price must be a number"
+        if age_restriction:
+            if not age_restriction.isdigit():
+                return "ERROR: Age restriction must be a number"
+
+        # Insert announcement into database
+        sql_query = """INSERT INTO Announcements (user_id, title, about, intented_price, intented_age_restriction)
+                       VALUES (?, ?, ?, ?, ?)"""
+        db.execute(sql_query, [session["user_id"], title, description, intented_price, age_restriction,])
+        return redirect("/")
+    return render_template("new_announcement.html")
+
+
+
 
 # Allows the app to run in IDE terminal in debug mode
 if __name__ == "__main__":

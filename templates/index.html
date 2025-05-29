@@ -6,8 +6,30 @@
 </head>
 
 <body>
-  <h1>Front page</h1>
-  <font size="4">Welcome to Indiedev!</font><br />
+  <h1>Welcome to Indiedev!</h1>
+  <p>
+    Indiedev is a platform for indie game developers to share their projects and ideas.
+  <p>
+    {% if session.username %}
+    <p>
+      You are logged in as {{ session.username }}.
+    </p>
+
+    <p>
+      <a href="/new_announcement">Create a new post</a>
+    </p>
+
+    <p>
+      <a href="/logout">Log out</a>
+    </p>
+
+    {% else %} 
+    <a href="/register">Create an account</a>
+    or
+    <a href="/login">log in</a>.
+    </p>
+    {% endif %}
+  </p>
 </body>
 
 </html>
