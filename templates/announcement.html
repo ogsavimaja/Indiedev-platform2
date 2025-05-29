@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{ announcement.title }}</title>
+</head>
+
+<body>
+  <h1>{{ announcement.title }}</h1>
+
+  {% if session.user_id == announcement.user_id %}
+  <p>
+    <a href="/announcement/{{ announcement.id }}/edit">Edit</a> &nbsp;
+    <a href="/announcement/{{ announcement.id }}/remove">Remove</a>
+  </p>
+  {% endif %}
+
+  <p>
+    Description: <br />
+    {{ announcement.about }}
+  <p>
+
+  <p>
+    Author:
+    {{ announcement.username }}
+  </p>
+
+  {% if announcement.intented_price %}
+  <p>
+    Intended price:
+    {{ announcement.intented_price }} €
+  </p>
+  {% endif %}
+
+  {% if announcement.intented_age_restriction %}
+  <p>
+    Intended age restriction:
+    {{ announcement.intented_age_restriction }}
+  </p>
+  {%endif%}
+
+  {% if announcement.download_link %}
+  <p>
+    Download link:
+    <a href="{{ announcement.download_link }}" target="_blank" rel="noopener noreferrer">{{ announcement.download_link }}</a>
+  </p>
+  {% endif %}
+
+  <p>
+    Post date:
+    {{ announcement.created_at }}
+  </p>
+
+  {% if announcement.updated_at %}
+  <p>
+    Last update:
+    {{ announcement.updated_at }}
+  </p>
+  {% endif %}
+
+  <p>
+    <a href="/">Back to the main page</a>
+  </p>
+</body>
+
+</html>

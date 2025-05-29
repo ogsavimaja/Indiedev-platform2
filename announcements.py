@@ -31,3 +31,18 @@ def get_announcement(announcement_id):
                    ON Announcement.user_id = Users.id AND Announcement.id = ?"""
     return db.query(sql_query, [announcement_id])[0]
 
+def update_announcement(announcement_id, title, download_link, description, intented_price, age_restriction):
+    sql_query = """UPDATE Announcements
+                   SET title = ?,
+                       download_link = ?,
+                       about = ?,
+                       intented_price = ?,
+                       intented_age_restriction = ?,
+                       updated_at = (datetime('now', 'localtime'))
+                   WHERE id = ?"""
+    db.execute(sql_query, [title, download_link, description, intented_price, age_restriction, announcement_id])
+
+def remove_announcement(announcement_id):
+    sql_query = """DELETE FROM Announcements
+                   WHERE id = ?"""
+    db.execute(sql_query, [announcement_id])
