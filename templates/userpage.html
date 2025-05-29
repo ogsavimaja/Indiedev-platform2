@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>User {{ user.username }}</title>
+</head>
+
+<body>
+  <h1>User {{ user.username }}</h1>
+  <p>
+    {{ user.username }} has created {{ user.count }} announcements.
+  </p>
+  <h2>Announcements</h2>
+  <ul>
+    {% for announcement in announcements %}
+    <li>
+      <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  <p>
+    <a href="/">Back to the main page</a>
+  </p>

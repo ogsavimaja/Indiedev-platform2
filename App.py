@@ -3,6 +3,7 @@ import sqlite3
 import db
 import config
 import announcements
+import users
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_hex
 
@@ -57,6 +58,26 @@ def login():
     return render_template("login.html")
 
 
+# Log out user
+@app.route("/logout")
+def logout():
+    del session["username"]
+    del session["user_id"]
+    del session["csrf_token"]
+    return redirect("/")
+
+
+# Render user page
+@app.route("/user/<int:user_id>")
+def user(user_id):
+    user_data = db.query("SELECT username FROM Users WHERE id = ?", [user_id])
+    if not user_data:
+        return errorpage("User not found", "Error while loading user")
+    user_data = user_data[0]
+    user_announcements = users.get_user_announcements(user_id)
+    return render_template("userpage.html", user=user_data, announcements=user_announcements)
+
+
 # Render registeration page
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -90,15 +111,6 @@ def register():
             return errorpage("Username already exists", "Error while creating account")
         return render_template("account_created.html")
     return render_template("register.html")
-
-
-# Log out user
-@app.route("/logout")
-def logout():
-    del session["username"]
-    del session["user_id"]
-    del session["csrf_token"]
-    return redirect("/")
 
 
 # Render announcement creation page
@@ -137,10 +149,23 @@ def new_announcement():
     return render_template("new_announcement.html")
 
 
+# Render search page
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "GET":
+        query = request.args.get("query")
+        print(query)
+        results = announcements.search_announcements(query) if query else None
+        return render_template("search.html", query=query, results=results)
+    return redirect("/")
+
+
 # Render announcement page
 @app.route("/announcement/<int:announcement_id>")
 def announcement(announcement_id):
     announcement = announcements.get_announcement(announcement_id)
+    if not announcement:
+        return errorpage("Announcement not found", "Error while loading announcement")
     return render_template("announcement.html", announcement=announcement)
 
 
@@ -168,8 +193,8 @@ def edit_announcement(announcement_id):
             # Validate user input
             if not title or not description:
                 return errorpage("All fields marked with * are required", "Error while editing announcement")
-            if len(title) > 100:
-                return errorpage("Title must be less than 100 characters", "Error while editing announcement")
+            if len(title) > 70:
+                return errorpage("Title must be less than 70 characters", "Error while editing announcement")
             if len(description) > 1000:
                 return errorpage("Description must be less than 1000 characters", "Error while editing announcement")
             if download_link:
@@ -192,12 +217,12 @@ def edit_announcement(announcement_id):
 # Render announcement remove page
 @app.route("/announcement/<int:announcement_id>/remove", methods=["GET", "POST"])
 def remove_announcement(announcement_id):
-    # Check if user is logged in
+    # Check if announcement excist, user is logged in and authorized to remove announcement
+    announcement = announcements.get_announcement(announcement_id)
+    if not announcement:
+        return errorpage("Announcement not found", "Error while removing announcement")
     if not session.get("username"):
         return redirect("/login")
-
-    # Check if user is authorized to remove announcement
-    announcement = announcements.get_announcement(announcement_id)
     if session["user_id"] != announcement["user_id"]:
         return errorpage("You are not authorized to remove this announcement", "Error while removing announcement")
 

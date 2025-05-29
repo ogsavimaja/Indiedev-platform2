@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 
 <head>
@@ -20,6 +19,10 @@
     </p>
 
     <p>
+      <a href="/user/{{ session.user_id }}">Your user page</a>
+    </p>
+
+    <p>
       <a href="/logout">Log out</a>
     </p>
 
@@ -29,22 +32,27 @@
     <a href="/login">log in</a>.
     </p>
     {% endif %}
-  </p>
+    <a href="/search">Search tool</a>
 
-
-  <h2>Latest announcements</h2>
-  <hr />
+    <h2>Latest announcements</h2>
+    <form action="/search" method="get">
+      <p>
+        Search from all announcements:
+        <input type="text" name="query" />
+      </p>
+      <input type="submit" value="Search" />
+    </form>
+    <hr />
 
     {% for announcement in announcements %}
     <p>
       <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
       <br />
-      {{ announcement.username }} ({{ announcement.created_at }})
+      <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a> ({{ announcement.created_at }})
     </p>
     <hr />
     {% endfor %}
-
-
+  </p>
 </body>
 
 </html>

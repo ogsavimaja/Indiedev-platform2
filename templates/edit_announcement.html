@@ -12,7 +12,7 @@
   <form action="/announcement/{{announcement.id}}/edit" method="post">
     <p>
       Name of the game*: <br />
-      <input type="text" name="title" value="{{ announcement.title }}"/>
+      <input type="text" name="title" maxlength="70" value="{{ announcement.title }}"/>
     </p>
 
     <p>
@@ -32,7 +32,7 @@
 
     <p>
       Description*: <br />
-      <textarea name="description" rows="6" cols="60">{{ announcement.about }}</textarea>
+      <textarea name="description" rows="6" cols="60" maxlength="1000">{{ announcement.about }}</textarea>
     </p>
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" name="confirm" value="Confirm changes" />

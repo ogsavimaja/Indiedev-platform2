@@ -22,7 +22,7 @@
 
   <p>
     Author:
-    {{ announcement.username }}
+    <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a>
   </p>
 
   {% if announcement.intented_price %}

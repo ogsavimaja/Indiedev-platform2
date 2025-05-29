@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Search announcements</title>
+</head>
+
+<body>
+  <h1>Search from all announcements</h1>
+  <a href="/">Back to the main page</a>
+  <br />
+  <form action="/search" method="get">
+    <p>
+      Search word:
+      {% if query %}
+      <input type="text" name="query" value="{{ query }}" />
+      {% else %}
+      <input type="text" name="query" />
+      {% endif %}
+    </p>
+    <input type="submit" value="Search" />
+  </form>
+  <br />
+  <h2>Search results</h2>
+  {% if not results %}
+  <hr />
+  <p>
+  No results found.
+  </p>
+  {% else %}
+  <p>
+    Found {{ results|length }} results.
+  </p>
+  <hr />
+  {% for announcement in results %}
+  <p>
+    <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
+    <br />
+    {{ announcement.username }} ({{ announcement.created_at }})
+  </p>
+  <hr />
+  {% endfor %}
+  {% endif %}
+  </p>
+</body>
+
+</html>
