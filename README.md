@@ -25,8 +25,10 @@ Currently in the app there are functionalities for the following tasks:
 * Creating an account
 * Logging in and out
 * Creating, editing and deleting announcements
+* Adding classes to announcements
 * Inspecting announcements added to the database trough the app
 * Searching for announcements with a keyword
+* Inspecting userpage
 
 The app also has protection against CSRF-attacks, SQL-injection and XSS-attacks. All of the saved passwords stored in the database are salted before hashing for vastly added rainbow table attack resistance and slightly added dictionary/bruteforce attack resistance in case of database breach. On top of that there is also improved errorhandling for most common types of errors that could lead to the app "crashing".
 
@@ -43,14 +45,15 @@ pip install flask
 ```
 
 3. Create database and tables.<br/>
-   You can create database and the table in it to the folder containing this project by using commands listed below in your terminal if you are using Linux or on other platforms by creating a database.db file, opening it with SQLite and     using command `.read schema.sql`.
+   You can create database and tables in it to the folder containing this project by using commands listed below in your terminal if you are using Linux or on other platforms by creating a database.db file in the repository, opening it with SQLite and using commands `.read schema.sql` and `.read init.sql`.
 
 ```
 sqlite3 database.db < schema.sql
+sqlite3 database.db < init.sql
 ```
 
 4. Run the program.<br/>
-   You can run the program by running the command shown below in a terminal that has been opened inside the folder containing this application if you have Flask added to your PATH or by running App.py (launches the  application in debug mode).
+   You can run the program by running the command shown below in a terminal that has been opened inside the folder containing this application if you have Flask added to your PATH or alternatively by running app.py (launches the application in debug mode).
 
 ```
 flask run
@@ -61,4 +64,4 @@ flask run
 > If you don't have [Python](https://www.python.org/downloads/) or [SQLite](https://www.sqlite.org/download.html) downloaded, you can use the links imbedded into this note to navigate to the corresponding download sites.
 
 > [!TIP]
-> This application can be run in VS Code (in debug mode) by running App.py in a basic VS Code enviromment
+> This application can be run in VS Code (in debug mode) by running app.py in a basic VS Code enviromment
