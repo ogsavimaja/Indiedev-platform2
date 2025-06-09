@@ -30,43 +30,6 @@ def index():
     return render_template("index.html", announcements=all_announcements)
 
 
-# Render login page
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        if not username or not password:
-            return errorpage("All fields are required", "Error while logging in")
-
-        # Check if user exists
-        sql_query = """SELECT id, username, hashed_password, salt
-                       FROM Users
-                       WHERE username = ?"""
-        user_data = db.query(sql_query, [username])
-        if not user_data:
-            return errorpage("Invalid Credentials", "Error while logging in")
-
-        # Check if password is correct
-        user_data = user_data[0]
-        if check_password_hash(user_data["hashed_password"], (password + user_data["salt"])):
-            session["username"] = user_data["username"]
-            session["user_id"] = user_data["id"]
-            session["csrf_token"] = token_hex(16)
-            return redirect("/")
-        return errorpage("Invalid Credentials", "Error while logging in")
-    return render_template("login.html")
-
-
-# Log out user
-@app.route("/logout")
-def logout():
-    del session["username"]
-    del session["user_id"]
-    del session["csrf_token"]
-    return redirect("/")
-
-
 # Render user page
 @app.route("/user/<int:user_id>")
 def user(user_id):
@@ -109,8 +72,45 @@ def register():
             db.execute(sql_query, [username, salt, generate_password_hash(password+salt), email])
         except sqlite3.IntegrityError:
             return errorpage("Username already exists", "Error while creating account")
-        return render_template("account_created.html")
+        return redirect("/login")
     return render_template("register.html")
+
+
+# Render login page
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if not username or not password:
+            return errorpage("All fields are required", "Error while logging in")
+
+        # Check if user exists
+        sql_query = """SELECT id, username, hashed_password, salt
+                       FROM Users
+                       WHERE username = ?"""
+        user_data = db.query(sql_query, [username])
+        if not user_data:
+            return errorpage("Invalid Credentials", "Error while logging in")
+
+        # Check if password is correct
+        user_data = user_data[0]
+        if check_password_hash(user_data["hashed_password"], (password + user_data["salt"])):
+            session["username"] = user_data["username"]
+            session["user_id"] = user_data["id"]
+            session["csrf_token"] = token_hex(16)
+            return redirect("/")
+        return errorpage("Invalid Credentials", "Error while logging in")
+    return render_template("login.html")
+
+
+# Log out user
+@app.route("/logout")
+def logout():
+    del session["username"]
+    del session["user_id"]
+    del session["csrf_token"]
+    return redirect("/")
 
 
 # Render search page
@@ -122,6 +122,19 @@ def search():
         results = announcements.search_announcements(query) if query else None
         return render_template("search.html", query=query, results=results)
     return redirect("/")
+
+
+# Render announcement page
+@app.route("/announcement/<int:announcement_id>")
+def announcement(announcement_id):
+    announcement = announcements.get_announcement(announcement_id)
+    if not announcement:
+        return errorpage("Announcement not found", "Error while loading announcement")
+
+    result = announcements.get_one_announcement_classes(announcement_id)
+    classes = result[0]
+    lengths = result[1]
+    return render_template("announcement.html", announcement=announcement, classes=classes, lengths=lengths)
 
 
 # Render announcement creation page
@@ -175,19 +188,6 @@ def new_announcement():
         announcements.add_announcement(session["user_id"], title, download_link, description, intented_price, age_restriction, classes)
         return redirect("/")
     return render_template("new_announcement.html", classes=all_classes, class_types=class_types)
-
-
-# Render announcement page
-@app.route("/announcement/<int:announcement_id>")
-def announcement(announcement_id):
-    announcement = announcements.get_announcement(announcement_id)
-    if not announcement:
-        return errorpage("Announcement not found", "Error while loading announcement")
-
-    result = announcements.get_one_announcement_classes(announcement_id)
-    classes = result[0]
-    lengths = result[1]
-    return render_template("announcement.html", announcement=announcement, classes=classes, lengths=lengths)
 
 
 # Render announcement edit page
