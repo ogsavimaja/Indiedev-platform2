@@ -15,6 +15,33 @@
       <input type="text" name="title" maxlength="70" value="{{ announcement.title }}"/>
     </p>
 
+{% for class in classes %}
+    <p>
+    {{ class }}{% if class == "State" %}*{% endif %}: <br />
+    {% if class_types[class] == "select" %}
+    <select name="{{ class }}">
+      <option value="">(choose)</option>
+      {% for option in classes[class] %}
+      {% if option in right_classes[class] %}
+      <option value="{{ option }}" selected>{{ option }}</option>
+      {% else %}
+      <option value="{{ option }}">{{ option }}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+
+    {% elif class_types[class] == "checkbox" %}
+    {% for option in classes[class] %}
+    {% if option in right_classes[class] %}
+    <input type="checkbox" name="{{ class }}" value="{{ option }}" checked /> {{ option }}<br />
+    {% else %}
+    <input type="checkbox" name="{{ class }}" value="{{ option }}" /> {{ option }}<br />
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    </p>
+    {% endfor %}
+
     <p>
       Link to download site: <br />
       <input type="text" name="download_link" value="{{ announcement.download_link }}"/>

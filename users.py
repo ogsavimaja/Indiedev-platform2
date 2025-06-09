@@ -9,8 +9,7 @@ def get_user(User_id):
     return result[0] if result else None
 
 def get_user_announcements(User_id):
-    sql_query = """SELECT COUNT(*) AS count,
-                          Announcement.id,
+    sql_query = """SELECT Announcement.id,
                           Announcement.title,
                           Announcement.created_at
                    FROM Announcements As Announcement

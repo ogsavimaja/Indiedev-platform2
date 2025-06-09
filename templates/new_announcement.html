@@ -15,6 +15,26 @@
       <input type="text" name="title" maxlength="70" />
     </p>
 
+    {% for class in classes %}
+    <p>
+    {{ class }}{% if class == "State" %}*{% endif %}: <br />
+    {% if class_types[class] == "select" %}
+    <select name="{{ class }}">
+      <option value="">(choose)</option>
+      {% for option in classes[class] %}
+      <option value="{{ option }}">{{ option }}</option>
+      {% endfor %}
+    </select>
+
+    {% elif class_types[class] == "checkbox" %}
+    {% for option in classes[class] %}
+    <input type="checkbox" name="{{ class }}" value="{{ option }}" /> {{ option }}<br />
+    {% endfor %}
+    {% elif class_types[class] == "textarea" %}
+    {% endif %}
+    </p>
+    {% endfor %}
+
     <p>
       Link to download site: <br />
       <input type="text" name="download_link" />

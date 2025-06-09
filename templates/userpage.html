@@ -8,7 +8,7 @@
 <body>
   <h1>User {{ user.username }}</h1>
   <p>
-    {{ user.username }} has created {{ user.count }} announcements.
+    {{ user.username }} has created {{ announcements | count }} announcements.
   </p>
   <h2>Announcements</h2>
   <ul>

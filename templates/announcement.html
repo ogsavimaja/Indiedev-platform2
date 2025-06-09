@@ -25,6 +25,21 @@
     <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a>
   </p>
 
+  {% for class, value in classes.items() %}
+<p>
+  {% if lengths[class]==1 %}
+  {{ class }}: {{ value[0] }}
+  {% else %}
+  {{ class }}: 
+  <ul>
+  {% for entry in value %}
+  <li>{{ entry }}</li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+</p>
+{% endfor %}
+
   {% if announcement.intented_price %}
   <p>
     Intended price:
