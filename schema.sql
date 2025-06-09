@@ -32,7 +32,16 @@ CREATE TABLE Class_types (
 
 CREATE TABLE Announcement_classes (
     id INTEGER PRIMARY KEY,
-    announcement_id INTEGER NOT NULL,
+    announcement_id INTEGER NOT NULL REFERENCES Announcements(id),
     title TEXT NOT NULL,
     value TEXT NOT NULL
+);
+
+CREATE TABLE Comments (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES Users(id),
+    announcement_id INTEGER NOT NULL REFERENCES Announcements(id),
+    comment TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now', 'localtime')),
+    updated_at TEXT
 );

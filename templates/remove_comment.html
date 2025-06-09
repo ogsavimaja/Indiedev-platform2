@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Remove comment</title>
+</head>
+
+<body>
+  <h1>Remove comment on {{ announcement.title }}</h1>
+
+  <form action="/announcement/{{announcement.id}}/comment/{{comment.id}}/remove" method="post">
+    <p>
+      Are you sure you want to remove comment: "{{ comment.comment }}" <br />
+      posted on announcement "{{ announcement.title }}"?
+      <br />
+      <br />
+      This action will delete the comment permanently and cannot be undone.
+    </p>
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" name="remove" value="Remove" />
+    <input type="submit" value="Cancel" />
+  </form>
+</body>
+
+</html>

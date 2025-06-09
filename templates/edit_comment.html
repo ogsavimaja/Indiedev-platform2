@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Edit comment</title>
+</head>
+
+<body>
+  <h1>Edit your comment on {{ announcement.title }}</h1>
+
+  <form action="/announcement/{{announcement.id}}/comment/{{comment.id}}/edit" method="post">
+    <p>
+      Comment: <br />
+      <textarea name="comment" rows="10" cols="50">{{ comment.comment }}</textarea>
+    </p>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" name="confirm" value="Confirm changes" />
+    <input type="submit" value="Cancel" />
+  </form>
+</body>
+
+</html>

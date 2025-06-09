@@ -64,7 +64,6 @@ def register():
             if not "@" in email or not "." in email:
                 return errorpage("Invalid email", "Error while creating account")
 
-
         # Check if username already exists, if not, create account
         try:
             sql_query = """INSERT INTO Users (username, salt, hashed_password, email)
@@ -125,8 +124,24 @@ def search():
 
 
 # Render announcement page
-@app.route("/announcement/<int:announcement_id>")
+@app.route("/announcement/<int:announcement_id>", methods=["GET", "POST"])
 def announcement(announcement_id):
+    if request.method == "POST":
+        if not session.get("username"):
+            return redirect("/login")
+        check_csrf_token()
+
+        if not announcements.get_announcement(announcement_id):
+            return errorpage("Announcement not found", "Error while loading announcement")
+
+        comment = request.form["comment"]
+        if not comment:
+            return errorpage("Comment cannot be empty", "Error while posting comment")
+        if len(comment) > 1000:
+            return errorpage("Comment must be less than 1000 characters", "Error while posting comment")
+        announcements.add_comment(announcement_id, session["user_id"], comment)
+        return redirect("/announcement/" + str(announcement_id))
+
     announcement = announcements.get_announcement(announcement_id)
     if not announcement:
         return errorpage("Announcement not found", "Error while loading announcement")
@@ -134,7 +149,8 @@ def announcement(announcement_id):
     result = announcements.get_one_announcement_classes(announcement_id)
     classes = result[0]
     lengths = result[1]
-    return render_template("announcement.html", announcement=announcement, classes=classes, lengths=lengths)
+    comments = announcements.get_comments(announcement_id)
+    return render_template("announcement.html", announcement=announcement, classes=classes, lengths=lengths, comments=comments)
 
 
 # Render announcement creation page
@@ -272,6 +288,54 @@ def remove_announcement(announcement_id):
         return redirect("/announcement/" + str(announcement_id))
     return render_template("remove_announcement.html", announcement=announcement)
 
+
+# Render comment edit page
+@app.route("/announcement/<int:announcement_id>/comment/<int:comment_id>/edit", methods=["GET", "POST"])
+def edit_comment(announcement_id, comment_id):
+    # Check if comment excist, user is logged in and is authorized to edit comment
+    comment = announcements.get_comment(comment_id)
+    if not comment:
+        return errorpage("Comment not found", "Error while editing comment")
+    if not session.get("username"):
+        return redirect("/login")
+    if session["user_id"] != comment["user_id"]:
+        return errorpage("You are not authorized to edit this comment", "Error while editing comment")
+    announcement = announcements.get_announcement(announcement_id)
+
+    if request.method == "POST":
+        check_csrf_token()
+        if "confirm" in request.form:
+            new_comment = request.form["comment"]
+            if not new_comment:
+                return errorpage("Comment cannot be empty", "Error while editing comment")
+            if len(new_comment) > 1000:
+                return errorpage("Comment must be less than 1000 characters", "Error while editing comment")
+            announcements.update_comment(comment_id, new_comment)
+            return redirect("/announcement/" + str(announcement_id))
+        return redirect("/announcement/" + str(announcement_id))
+    return render_template("edit_comment.html", comment=comment, announcement=announcement)
+
+
+# Render comment remove page
+@app.route("/announcement/<int:announcement_id>/comment/<int:comment_id>/remove", methods=["GET", "POST"])
+def remove_comment(announcement_id, comment_id):
+    # Check if comment excist, user is logged in and is authorized to remove comment
+    comment = announcements.get_comment(comment_id)
+    if not comment:
+        return errorpage("Comment not found", "Error while removing comment")
+    if not session.get("username"):
+        return redirect("/login")
+    if session["user_id"] != comment["user_id"]:
+        return errorpage("You are not authorized to remove this comment", "Error while removing comment")
+    announcement = announcements.get_announcement(announcement_id)
+
+    if request.method == "POST":
+        check_csrf_token()
+        if "remove" in request.form:
+            announcements.remove_comment(comment_id)
+            return redirect("/announcement/" + str(announcement_id))
+        return redirect("/announcement/" + str(announcement_id))
+    return render_template("remove_comment.html", comment=comment, announcement=announcement)
 
 
 

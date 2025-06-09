@@ -76,6 +76,35 @@
   <p>
     <a href="/">Back to the main page</a>
   </p>
+  <br /><br />
+  <hr />
+  <h2>Feedback & Comments</h2>
+  <p>New feedback/comment:</p>
+  <form action="/announcement/{{ announcement.id }}" method="post">
+    <p>
+      <textarea name="comment" rows="6" cols="60" maxlength="1000"></textarea>
+    </p>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" value="Add a comment" />
+  </form>
+  <br />
+  <hr />
+  {% for comment in comments %}
+  <p>
+    <font size="4">{{ comment.comment }}</font><br /><br />
+    {{ comment.created_at }}<br />
+    {% if comment.updated_at %}
+    Edited at: {{ comment.updated_at }}<br />
+    {% endif %}
+    <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
+    <br />
+    {% if session.user_id == comment.user_id %}
+    <a href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/edit">Edit</a> &nbsp;
+    <a href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/remove">Remove</a>
+    {% endif %}
+  </p>
+  <hr />
+  {% endfor %}
 </body>
 
 </html>

@@ -78,12 +78,16 @@ def update_announcement(announcement_id, title, download_link, description, inte
         db.execute(sql_query, [announcement_id, title, value])
 
 def remove_announcement(announcement_id):
-    sql_query = """DELETE FROM Announcements
-                   WHERE id = ?"""
+    sql_query = """DELETE FROM Announcement_classes
+                    WHERE announcement_id = ?"""
     db.execute(sql_query, [announcement_id])
 
-    sql_query = """DELETE FROM Announcement_classes
-                   WHERE announcement_id = ?"""
+    sql_query = """DELETE FROM Comments
+                    WHERE announcement_id = ?"""
+    db.execute(sql_query, [announcement_id])
+
+    sql_query = """DELETE FROM Announcements
+                   WHERE id = ?"""
     db.execute(sql_query, [announcement_id])
 
 def search_announcements(search):
@@ -119,3 +123,43 @@ def get_announcement_classes():
             class_types[title] = get_class_types(title)[0]["type"]
         classes[title].append(value)
     return classes, class_types
+
+def add_comment(announcement_id, user_id, comment):
+    sql_query = """INSERT INTO Comments (announcement_id, user_id, comment)
+                   VALUES (?, ?, ?)"""
+    db.execute(sql_query, [announcement_id, user_id, comment])
+
+def get_comments(announcement_id):
+    sql_query = """SELECT Comments.id,
+                          Comments.user_id,
+                          Comments.comment,
+                          Comments.created_at,
+                          Comments.updated_at,
+                          Users.username AS username,
+                          Users.id AS user_id
+                   FROM Comments
+                   INNER JOIN Users
+                   ON Comments.user_id = Users.id AND Comments.announcement_id = ?
+                   ORDER BY Comments.created_at DESC"""
+    return db.query(sql_query, [announcement_id])
+
+def get_comment(comment_id):
+    sql_query = """SELECT Comments.id,
+                          Comments.user_id,
+                          Comments.comment
+                   FROM Comments
+                   WHERE Comments.id = ?"""
+    result = db.query(sql_query, [comment_id])
+    return result[0] if result else None
+
+def update_comment(comment_id, comment):
+    sql_query = """UPDATE Comments
+                   SET comment = ?,
+                       updated_at = (datetime('now', 'localtime'))
+                   WHERE id = ?"""
+    db.execute(sql_query, [comment, comment_id])
+
+def remove_comment(comment_id):
+    sql_query = """DELETE FROM Comments
+                   WHERE id = ?"""
+    db.execute(sql_query, [comment_id])
