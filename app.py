@@ -211,7 +211,7 @@ def new_announcement():
         if len(description) > 1000:
             return errorpage("Description must be less than 1000 characters", "Error while creating announcement")
         if download_link:
-            if not download_link.startswith("http"):
+            if not download_link.startswith("http") or ":" not in download_link or "/" not in download_link or "." not in download_link:
                 return errorpage("Invalid download link", "Error while creating announcement")
         if intented_price:
             if not intented_price.isdigit():

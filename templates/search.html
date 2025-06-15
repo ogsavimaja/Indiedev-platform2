@@ -6,6 +6,21 @@
 </head>
 
 <body>
+  <header style="background-color: rgb(104, 168, 197)">
+    <h2>Indiedev</h2>
+    <a href="/">Home</a>&nbsp&nbsp
+    <a href="/search">Search</a>&nbsp&nbsp
+    {% if session.username %}
+    <a href="/new_announcement">Create a new post</a>&nbsp&nbsp
+    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp&nbsp
+    <a href="/logout">Log out</a>
+    {% else %} 
+    <a href="/register">Create an account</a>&nbsp&nbsp
+    <a href="/login">Login</a>
+    {% endif %}
+    <hr />
+  </header>
+
   <h1>Search from all announcements</h1>
   <a href="/">Back to the main page</a>
   <br />

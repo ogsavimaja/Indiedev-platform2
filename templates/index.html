@@ -5,34 +5,36 @@
 </head>
 
 <body>
-  <h1>Welcome to Indiedev!</h1>
-  <p>
-    Indiedev is a platform for indie game developers to share their projects and ideas.
-  <p>
-    {% if session.username %}
+  <header style="background-color: rgb(104, 168, 197)">
+    <h1>Welcome to Indiedev!</h1>
     <p>
-      You are logged in as {{ session.username }}.
-    </p>
-
+      Indiedev is a platform for indie game developers to share their projects and ideas.
     <p>
-      <a href="/new_announcement">Create a new post</a>
-    </p>
+      {% if session.username %}
+      <p>
+        You are logged in as {{ session.username }}.
+      </p>
 
-    <p>
-      <a href="/user/{{ session.user_id }}">Your user page</a>
-    </p>
+      <p>
+        <a href="/new_announcement">Create a new post</a>
+      </p>
 
-    <p>
-      <a href="/logout">Log out</a>
-    </p>
+      <p>
+        <a href="/user/{{ session.user_id }}">Your user page</a>
+      </p>
 
-    {% else %} 
-    <a href="/register">Create an account</a>
-    or
-    <a href="/login">Login</a>.
-    </p>
-    {% endif %}
-    <a href="/search">Search tool</a>
+      <p>
+        <a href="/logout">Log out</a>
+      </p>
+
+      {% else %} 
+      <a href="/register">Create an account</a>
+      or
+      <a href="/login">Login</a>.
+      </p>
+      {% endif %}
+      <a href="/search">Search</a>
+    </header>
 
     <h2>Latest announcements</h2>
     <form action="/search" method="get">
