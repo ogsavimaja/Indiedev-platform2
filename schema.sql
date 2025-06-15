@@ -19,6 +19,9 @@ CREATE TABLE Announcements (
     updated_at TEXT
 );
 
+CREATE INDEX idx_title ON Announcements (title);
+CREATE INDEX idx_about ON Announcements (about);
+
 CREATE TABLE Classes (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
