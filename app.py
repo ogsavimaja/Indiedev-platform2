@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 import sqlite3
 import db
 import config
@@ -53,16 +53,21 @@ def register():
 
         # Validate user input
         if not username or not password or not confirm_password:
-            return errorpage("All fields except email are required", "Error while creating account")
+            flash("ERROR: All fields except email are required")
+            return redirect("/register")
         if len(password) < 8:
-            return errorpage("Password must be at least 8 characters long", "Error while creating account")
+            flash("ERROR: Password must be at least 8 characters long")
+            return redirect("/register")
         if len(username) < 3:
-            return errorpage("Username must be at least 3 characters long", "Error while creating account")
+            flash("ERROR: Username must be at least 3 characters long")
+            return redirect("/register")
         if password != confirm_password:
-            return errorpage("Passwords do not match", "Error while creating account")
+            flash("ERROR: Passwords do not match")
+            return redirect("/register")
         if email:
             if not "@" in email or not "." in email:
-                return errorpage("Invalid email", "Error while creating account")
+                flash("ERROR: Invalid email")
+                return redirect("/register")
 
         # Check if username already exists, if not, create account
         try:
@@ -70,7 +75,8 @@ def register():
                         VALUES (?, ?, ?, ?)"""
             db.execute(sql_query, [username, salt, generate_password_hash(password+salt), email])
         except sqlite3.IntegrityError:
-            return errorpage("Username already exists", "Error while creating account")
+            flash("ERROR: Username already exists")
+            return redirect("/register")
         return redirect("/login")
     return render_template("register.html")
 
@@ -82,7 +88,8 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if not username or not password:
-            return errorpage("All fields are required", "Error while logging in")
+            flash("ERROR: All fields are required")
+            return redirect("/login")
 
         # Check if user exists
         sql_query = """SELECT id, username, hashed_password, salt
@@ -90,7 +97,8 @@ def login():
                        WHERE username = ?"""
         user_data = db.query(sql_query, [username])
         if not user_data:
-            return errorpage("Invalid Credentials", "Error while logging in")
+            flash("ERROR: Invalid credentials")
+            return redirect("/login")
 
         # Check if password is correct
         user_data = user_data[0]
@@ -99,7 +107,8 @@ def login():
             session["user_id"] = user_data["id"]
             session["csrf_token"] = token_hex(16)
             return redirect("/")
-        return errorpage("Invalid Credentials", "Error while logging in")
+        flash("ERROR: Invalid credentials")
+        return redirect("/login")
     return render_template("login.html")
 
 
@@ -136,9 +145,11 @@ def announcement(announcement_id):
 
         comment = request.form["comment"]
         if not comment:
-            return errorpage("Comment cannot be empty", "Error while posting comment")
+            flash("ERROR: Comment cannot be empty")
+            return redirect("/announcement/" + str(announcement_id))
         if len(comment) > 1000:
-            return errorpage("Comment must be less than 1000 characters", "Error while posting comment")
+            flash("ERROR: Comment must be less than 1000 characters")
+            return redirect("/announcement/" + str(announcement_id))
         announcements.add_comment(announcement_id, session["user_id"], comment)
         return redirect("/announcement/" + str(announcement_id))
 

@@ -9,6 +9,11 @@
   <h1>Create an account</h1>
   <font size="4">Please fill in the form to create an account.</font><br />
   <font size="2">The username must be at least 3 characters long and the password must be at least 8 characters long.</font>
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
   <form action="/register" method="post">
     <p>
       Email (optional): <br />
@@ -32,7 +37,7 @@
     <input type="submit" value="Create an account" />
   </form>
   <p>
-    <button onclick="history.back()">Back</button>
+    <a href="/">Back to the main page</a>
   </p>
 </body>
 

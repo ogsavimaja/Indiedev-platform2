@@ -17,7 +17,7 @@ def get_announcements():
                           Announcement.title,
                           Announcement.created_at,
                           Users.username
-                   FROM Announcements As Announcement
+                   FROM Announcements AS Announcement
                    INNER JOIN Users
                    ON Announcement.user_id = Users.id
                    ORDER BY Announcement.id DESC"""
@@ -52,7 +52,7 @@ def get_announcement(announcement_id):
                           Announcement.created_at,
                           Announcement.updated_at,
                           Users.username
-                   FROM Announcements As Announcement
+                   FROM Announcements AS Announcement
                    INNER JOIN Users
                    ON Announcement.user_id = Users.id AND Announcement.id = ?"""
     result = db.query(sql_query, [announcement_id])
@@ -95,7 +95,7 @@ def search_announcements(search):
                           Announcement.title,
                           Announcement.created_at,
                           Users.username
-                   FROM Announcements As Announcement
+                   FROM Announcements AS Announcement
                    INNER JOIN Users
                    ON Announcement.user_id = Users.id
                    WHERE Announcement.title LIKE ? OR Announcement.about LIKE ?
