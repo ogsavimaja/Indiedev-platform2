@@ -10,7 +10,7 @@
 
   <form action="/announcement/{{announcement.id}}/comment/{{comment.id}}/remove" method="post">
     <p>
-      Are you sure you want to remove comment: "{{ comment.comment }}" <br />
+      Are you sure you want to remove comment: "{{ comment.comment | show_lines}}" <br />
       posted on announcement "{{ announcement.title }}"?
       <br />
       <br />

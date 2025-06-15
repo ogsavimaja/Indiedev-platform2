@@ -4,6 +4,7 @@ import db
 import config
 import announcements
 import users
+import markupsafe
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_hex
 
@@ -12,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = config.secret_key
 
 
-#render error page with error message and type
+# Render error page with error message and type
 def errorpage(error_message, error_type):
     return render_template("errorpage.html", error_message=error_message, error_type=error_type)
 
@@ -21,6 +22,14 @@ def errorpage(error_message, error_type):
 def check_csrf_token():
     if request.form["csrf_token"] != session["csrf_token"]:
         return errorpage("Invalid CSRF token", "Error while processing request")
+
+
+# Allows browser to see line breaks
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 
 # Render homepage with announcements

@@ -25,17 +25,17 @@
     <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
   </li>
   {% endfor %}
-
+  <p>
   <h2>Feedback & Comments created by {{ user.username }}</h2>
   <hr />
   {% for comment in comments %}
-  <li>
-    <a href="/announcement/{{ comment.announcement_id }}">{{ comment.comment }}</a>
+
+    <a href="/announcement/{{ comment.announcement_id }}">{{ comment.comment | show_lines }}</a>
     <p>
       Posted on: <a href="/announcement/{{ comment.announcement_id }}">{{ comment.announcement_title }}</a><br />
       Created at: {{ comment.created_at }}
     </p>
-  </li>
+  </p>
   <hr />
   {% endfor %}
 

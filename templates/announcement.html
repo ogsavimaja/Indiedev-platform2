@@ -17,7 +17,7 @@
 
   <p>
     <b>Description:</b> <br />
-    {{ announcement.about }}
+    {{ announcement.about | show_lines}}
   <p>
 
   <p>
@@ -96,7 +96,7 @@
   <hr />
   {% for comment in comments %}
   <p>
-    <font size="4">{{ comment.comment }}</font><br /><br />
+    <font size="4">{{ comment.comment | show_lines }}</font><br /><br />
     {{ comment.created_at }}<br />
     {% if comment.updated_at %}
     Edited at: {{ comment.updated_at }}<br />
