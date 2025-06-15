@@ -8,16 +8,36 @@
 <body>
   <h1>User {{ user.username }}</h1>
   <p>
-    {{ user.username }} has created {{ announcements | count }} announcements.
-  </p>
-  <h2>Announcements</h2>
-  <ul>
-    {% for announcement in announcements %}
-    <li>
-      <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
-    </li>
-    {% endfor %}
-  </ul>
-  <p>
     <a href="/">Back to the main page</a>
   </p>
+
+  <p>
+    {{ user.username }} joined our platform at: {{ user.created_at }}
+  </p>
+
+  <p>
+    {{ user.username }} has created {{ announcements | count }} announcements and {{ comments | count }} comments.
+  </p>
+
+  <h2>Announcements created by {{ user.username }}</h2>
+  {% for announcement in announcements %}
+  <li>
+    <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
+  </li>
+  {% endfor %}
+
+  <h2>Feedback & Comments created by {{ user.username }}</h2>
+  <hr />
+  {% for comment in comments %}
+  <li>
+    <a href="/announcement/{{ comment.announcement_id }}">{{ comment.comment }}</a>
+    <p>
+      Posted on: <a href="/announcement/{{ comment.announcement_id }}">{{ comment.announcement_title }}</a><br />
+      Created at: {{ comment.created_at }}
+    </p>
+  </li>
+  <hr />
+  {% endfor %}
+
+</body>
+</html>

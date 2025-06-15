@@ -80,6 +80,11 @@
   <hr />
   <h2>Feedback & Comments</h2>
   <p>New feedback/comment:</p>
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
   <form action="/announcement/{{ announcement.id }}" method="post">
     <p>
       <textarea name="comment" rows="6" cols="60" maxlength="1000"></textarea>
@@ -89,11 +94,6 @@
   </form>
   <br />
   <hr />
-  {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
-  {% endfor %}
   {% for comment in comments %}
   <p>
     <font size="4">{{ comment.comment }}</font><br /><br />

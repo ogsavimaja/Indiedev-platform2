@@ -3,7 +3,8 @@ CREATE TABLE Users (
     username TEXT UNIQUE NOT NULL,
     salt TEXT NOT NULL,
     hashed_password TEXT NOT NULL,
-    email TEXT
+    email TEXT,
+    created_at TEXT DEFAULT (datetime('now', 'localtime'))
 );
 
 CREATE TABLE Announcements (

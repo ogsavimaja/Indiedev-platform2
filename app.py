@@ -33,12 +33,12 @@ def index():
 # Render user page
 @app.route("/user/<int:user_id>")
 def user(user_id):
-    user_data = db.query("SELECT username FROM Users WHERE id = ?", [user_id])
+    user_data = users.get_user(user_id)
     if not user_data:
         return errorpage("User not found", "Error while loading user")
-    user_data = user_data[0]
     user_announcements = users.get_user_announcements(user_id)
-    return render_template("userpage.html", user=user_data, announcements=user_announcements)
+    comments = users.get_user_comments(user_id)
+    return render_template("userpage.html", user=user_data, announcements=user_announcements, comments=comments)
 
 
 # Render registeration page
