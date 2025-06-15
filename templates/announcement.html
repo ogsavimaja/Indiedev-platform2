@@ -16,59 +16,59 @@
   {% endif %}
 
   <p>
-    Description: <br />
+    <b>Description:</b> <br />
     {{ announcement.about }}
   <p>
 
   <p>
-    Author:
+    <b>Author</b>:
     <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a>
   </p>
 
   {% for class, value in classes.items() %}
-<p>
-  {% if lengths[class]==1 %}
-  {{ class }}: {{ value[0] }}
-  {% else %}
-  {{ class }}: 
-  <ul>
-  {% for entry in value %}
-  <li>{{ entry }}</li>
+  <p>
+    {% if lengths[class]==1 %}
+    <b>{{ class }}:</b> {{ value[0] }}
+    {% else %}
+    <b>{{ class }}:</b> 
+    <ul>
+    {% for entry in value %}
+    <li>{{ entry }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+  </p>
   {% endfor %}
-  </ul>
-  {% endif %}
-</p>
-{% endfor %}
 
   {% if announcement.intented_price %}
   <p>
-    Intended price:
+    <b>Intended price:</b>
     {{ announcement.intented_price }} €
   </p>
   {% endif %}
 
   {% if announcement.intented_age_restriction %}
   <p>
-    Intended age restriction:
+    <b>Intended age restriction:</b>
     {{ announcement.intented_age_restriction }}
   </p>
   {%endif%}
 
   {% if announcement.download_link %}
   <p>
-    Download link:
+    <b>Download link:</b>
     <a href="{{ announcement.download_link }}" target="_blank" rel="noopener noreferrer">{{ announcement.download_link }}</a>
   </p>
   {% endif %}
 
   <p>
-    Post date:
+    <b>Post date:</b>
     {{ announcement.created_at }}
   </p>
 
   {% if announcement.updated_at %}
   <p>
-    Last update:
+    <b>Last update:</b>
     {{ announcement.updated_at }}
   </p>
   {% endif %}
