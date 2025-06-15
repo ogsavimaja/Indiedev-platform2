@@ -29,7 +29,7 @@ Currently in the app there are functionalities for the following tasks:
 * Adding classes to announcements
 * Inspecting announcements and comments added to the database trough the app
 * Searching for announcements with a keyword
-* Inspecting userpage
+* Inspecting userpages that show statistics about corresponding user and their announcements and comments
 
 The app also has protection against CSRF-attacks, SQL-injection and XSS-attacks. All of the saved passwords stored in the database are salted before hashing for vastly added rainbow table attack resistance and slightly added dictionary/bruteforce attack resistance in case of database breach. On top of that there is also improved errorhandling for most common types of errors that could lead to the app "crashing". Errors regarding forms that user has filled are shown on the same page as the form where favorable.
 
