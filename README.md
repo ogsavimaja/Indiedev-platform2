@@ -25,7 +25,7 @@ Currently in the app there are functionalities for the following tasks:
 * Creating an account
 * Logging in and out
 * Creating, editing and deleting announcements
-* Creating, editing and deleting comments
+* Creating, editing and deleting comments on announcements
 * Adding classes to announcements
 * Inspecting announcements and comments added to the database trough the app
 * Searching for announcements with a keyword
