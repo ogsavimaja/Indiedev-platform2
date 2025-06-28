@@ -18,6 +18,11 @@ def errorpage(error_message, error_type):
     return render_template("errorpage.html", error_message=error_message, error_type=error_type)
 
 
+# Check if user is logged in
+def require_login():
+    if not session.get("username"):
+        return redirect("/login")
+
 # Check if CSRF token is valid
 def check_csrf_token():
     if request.form["csrf_token"] != session["csrf_token"]:
@@ -135,7 +140,6 @@ def logout():
 def search():
     if request.method == "GET":
         query = request.args.get("query")
-        print(query)
         results = announcements.search_announcements(query) if query else None
         return render_template("search.html", query=query, results=results)
     return redirect("/")
@@ -145,8 +149,7 @@ def search():
 @app.route("/announcement/<int:announcement_id>", methods=["GET", "POST"])
 def announcement(announcement_id):
     if request.method == "POST":
-        if not session.get("username"):
-            return redirect("/login")
+        require_login()
         check_csrf_token()
 
         if not announcements.get_announcement(announcement_id):
@@ -176,8 +179,7 @@ def announcement(announcement_id):
 # Render announcement creation page
 @app.route("/new_announcement", methods=["GET", "POST"])
 def new_announcement():
-    if not session.get("username"):
-        return redirect("/login")
+    require_login()
     result = announcements.get_announcement_classes()
     all_classes = result[0]
     class_types = result[1]
@@ -229,10 +231,7 @@ def new_announcement():
 # Render announcement edit page
 @app.route("/announcement/<int:announcement_id>/edit", methods=["GET", "POST"])
 def edit_announcement(announcement_id):
-    # Check if user is logged in
-    if not session.get("username"):
-        return redirect("/login")
-
+    require_login()
     # Check if user is authorized to edit announcement
     announcement = announcements.get_announcement(announcement_id)
     if session["user_id"] != announcement["user_id"]:
@@ -295,8 +294,7 @@ def remove_announcement(announcement_id):
     announcement = announcements.get_announcement(announcement_id)
     if not announcement:
         return errorpage("Announcement not found", "Error while removing announcement")
-    if not session.get("username"):
-        return redirect("/login")
+    require_login()
     if session["user_id"] != announcement["user_id"]:
         return errorpage("You are not authorized to remove this announcement", "Error while removing announcement")
 
@@ -316,8 +314,7 @@ def edit_comment(announcement_id, comment_id):
     comment = announcements.get_comment(comment_id)
     if not comment:
         return errorpage("Comment not found", "Error while editing comment")
-    if not session.get("username"):
-        return redirect("/login")
+    require_login()
     if session["user_id"] != comment["user_id"]:
         return errorpage("You are not authorized to edit this comment", "Error while editing comment")
     announcement = announcements.get_announcement(announcement_id)
@@ -343,8 +340,7 @@ def remove_comment(announcement_id, comment_id):
     comment = announcements.get_comment(comment_id)
     if not comment:
         return errorpage("Comment not found", "Error while removing comment")
-    if not session.get("username"):
-        return redirect("/login")
+    require_login()
     if session["user_id"] != comment["user_id"]:
         return errorpage("You are not authorized to remove this comment", "Error while removing comment")
     announcement = announcements.get_announcement(announcement_id)

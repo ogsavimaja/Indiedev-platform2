@@ -6,36 +6,29 @@
 
 <body>
   <header style="background-color: rgb(104, 168, 197)">
-    <h1>Welcome to Indiedev!</h1>
+    <h2>Indiedev</h2>
+    {% if session.username %}
     <p>
-      Indiedev is a platform for indie game developers to share their projects and ideas.
-    <p>
-      {% if session.username %}
-      <p>
-        You are logged in as {{ session.username }}.
-      </p>
+      <b>You are logged in as {{ session.username }}.</b>
+    </p>
+    {% endif %}
+    |<a href="/">Home</a>&nbsp|&nbsp
+    <a href="/search">Search</a>&nbsp|&nbsp
+    {% if session.user_id %}
+    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
+    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
+    <a href="/logout">Log out</a>&nbsp|
+    {% else %} 
+    <a href="/register">Create an account</a>&nbsp|&nbsp
+    <a href="/login">Login</a>&nbsp|
+    {% endif %}
+    <hr />
+  </header>
 
-      <p>
-        <a href="/new_announcement">Create a new post</a>
-      </p>
-
-      <p>
-        <a href="/user/{{ session.user_id }}">Your user page</a>
-      </p>
-
-      <p>
-        <a href="/logout">Log out</a>
-      </p>
-
-      {% else %} 
-      <a href="/register">Create an account</a>
-      or
-      <a href="/login">Login</a>.
-      </p>
-      {% endif %}
-      <a href="/search">Search</a>
-    </header>
-
+  <h1>Welcome to Indiedev!</h1>
+  <p>
+    Indiedev is a platform for indie game developers to share their projects and ideas.
+  <p>
     <h2>Latest announcements</h2>
     <form action="/search" method="get">
       <p>
