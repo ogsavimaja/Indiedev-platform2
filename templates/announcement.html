@@ -74,7 +74,10 @@
 <hr />
 <h2>Feedback & Comments</h2>
 {% if session.user_id %}
-<p>New feedback/comment:</p>
+<p>
+  New feedback/comment:
+</p>
+
 {% for message in get_flashed_messages() %}
 <p>
   <b>{{ message }}</b>
@@ -90,6 +93,7 @@
 {% endif %}
 <br />
 <hr />
+
 {% for comment in comments %}
 <div class="comment">
   <font size="4">{{ comment.comment | show_lines }}</font><br /><br />
@@ -104,6 +108,5 @@
   <a class="link" href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/remove">Remove</a>
   {% endif %}
 </div>
-<hr />
 {% endfor %}
 {% endblock %}

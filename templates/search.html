@@ -16,13 +16,9 @@
   <input type="submit" value="Search" />
 </form>
 <br />
+
 <h2>Search results</h2>
-{% if not results %}
-<hr />
-<p>
-No results found.
-</p>
-{% else %}
+{% if results %}
 <p>
   Found {{ results|length }} results.
 </p>
@@ -35,6 +31,11 @@ No results found.
 </p>
 <hr />
 {% endfor %}
+{% else %}
+<hr />
+<p>
+  No results found.
+</p>
 {% endif %}
 </p>
 {% endblock %}

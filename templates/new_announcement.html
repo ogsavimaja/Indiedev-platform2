@@ -5,6 +5,11 @@
 {% block content %}
 <h1>Create a new game announcement</h1>
 <font size="3">The spots marked with * are mandatory</font><br />
+{% for message in get_flashed_messages() %}
+<p>
+  <b>{{ message }}</b>
+</p>
+{% endfor %}
 
 <form action="/new_announcement" method="post">
   <p>

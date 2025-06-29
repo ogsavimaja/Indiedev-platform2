@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ error_type }}</title>
-</head>
+{% block title %}{{ error_type }}{% endblock %}
 
-<body>
-  <h2>{{ error_type }}</h2>
-  <p>
-    {{ error_message }}
-  </p>
+{% block content %}
+<h2>{{ error_type }}</h2>
+<p>
+  {{ error_message }}
+</p>
 
-  <p>
-    <button onclick="history.back()">Back</button>
-  </p>
-</body>
-
-</html>
+<p>
+  <button onclick="history.back()">Back</button>
+</p>
+{% endblock %}

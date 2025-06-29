@@ -4,6 +4,11 @@
 
 {% block content %}
 <h1>Edit your comment on {{ announcement.title }}</h1>
+{% for message in get_flashed_messages() %}
+<p>
+  <b>{{ message }}</b>
+</p>
+{% endfor %}
 
 <form action="/announcement/{{announcement.id}}/comment/{{comment.id}}/edit" method="post">
   <p>

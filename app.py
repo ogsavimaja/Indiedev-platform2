@@ -98,6 +98,7 @@ def register():
         except sqlite3.IntegrityError:
             flash("ERROR: Username already exists")
             return redirect("/register")
+        flash("The account has been created succesfully")
         return redirect("/login")
     return render_template("register.html")
 
@@ -210,27 +211,35 @@ def new_announcement():
                         if name == "State":
                             state = True
                     else:
-                        return errorpage("Invalid input", "Error while creating announcement")
+                        flash("ERROR: Invalid input")
+                        return redirect("/new_announcement")
 
         # Validate user input
         if not title or not description or not state:
-            return errorpage("All fields marked with * are required", "Error while creating announcement")
+            flash("ERROR: All fields marked with * are required")
+            return redirect("/new_announcement")
         if len(title) > 70:
-            return errorpage("Title must be less than 70 characters", "Error while creating announcement")
+            flash("ERROR: Title must be less than 70 characters")
+            return redirect("/new_announcement")
         if len(description) > 1000:
-            return errorpage("Description must be less than 1000 characters", "Error while creating announcement")
+            flash("ERROR: Description must be less than 1000 characters")
+            return redirect("/new_announcement")
         if download_link:
             if not download_link.startswith("http") or ":" not in download_link or "/" not in download_link or "." not in download_link:
-                return errorpage("Invalid download link", "Error while creating announcement")
+                flash("ERROR: Invalid download link")
+                return redirect("/new_announcement")
         if intented_price:
             if not intented_price.isdigit():
-                return errorpage("Price must be a number (0 for free), (currently supports only integers)", "Error while creating announcement")
+                flash("ERROR: Price must be a number (0 for free)")
+                return redirect("/new_announcement")
         if age_restriction:
             if not age_restriction.isdigit():
-                return errorpage("Age restriction must be a number", "Error while creating announcement")
+                flash("ERROR: Age restriction must be a number")
+                return redirect("/new_announcement")
 
         # Insert announcement into database
         announcements.add_announcement(session["user_id"], title, download_link, description, intented_price, age_restriction, classes)
+        flash("The announcement has been created!")
         return redirect("/")
     return render_template("new_announcement.html", classes=all_classes, class_types=class_types)
 
@@ -268,24 +277,31 @@ def edit_announcement(announcement_id):
                             if name == "State":
                                 state = True
                         else:
-                            return errorpage("Invalid input", "Error while creating announcement")
+                            flash("ERROR: Invalid input")
+                            return redirect(f"/announcement/{announcement_id}/edit")
 
             # Validate user input
             if not title or not description or not state:
-                return errorpage("All fields marked with * are required", "Error while editing announcement")
+                flash("ERROR: All fields marked with * are required")
+                return redirect(f"/announcement/{announcement_id}/edit")
             if len(title) > 70:
-                return errorpage("Title must be less than 70 characters", "Error while editing announcement")
+                flash("ERROR: Title must be less than 70 characters")
+                return redirect(f"/announcement/{announcement_id}/edit")
             if len(description) > 1000:
-                return errorpage("Description must be less than 1000 characters", "Error while editing announcement")
+                flash("ERROR: Description must be less than 1000 characters")
+                return redirect(f"/announcement/{announcement_id}/edit")
             if download_link:
-                if not download_link.startswith("http"):
-                    return errorpage("Invalid download link", "Error while editing announcement")
+                if not download_link.startswith("http") or ":" not in download_link or "/" not in download_link or "." not in download_link:
+                    flash("ERROR: Invalid download link")
+                    return redirect(f"/announcement/{announcement_id}/edit")
             if intented_price:
                 if not intented_price.isdigit():
-                    return errorpage("Price must be a number (0 for free), (currently supports only integers)", "Error while editing announcement")
+                    flash("ERROR: Price must be a number (0 for free)")
+                    return redirect(f"/announcement/{announcement_id}/edit")
             if age_restriction:
                 if not age_restriction.isdigit():
-                    return errorpage("Age restriction must be a number", "Error while editing announcement")
+                    flash("ERROR: Age restriction must be a number")
+                    return redirect(f"/announcement/{announcement_id}/edit")
 
             # Update announcement in database
             announcements.update_announcement(announcement_id, title, download_link, description, intented_price, age_restriction, classes)
@@ -309,6 +325,7 @@ def remove_announcement(announcement_id):
         check_csrf_token()
         if "remove" in request.form:
             announcements.remove_announcement(announcement_id)
+            flash("The announcement has been removed!")
             return redirect("/")
         return redirect("/announcement/" + str(announcement_id))
     return render_template("remove_announcement.html", announcement=announcement)
@@ -331,9 +348,11 @@ def edit_comment(announcement_id, comment_id):
         if "confirm" in request.form:
             new_comment = request.form["comment"].strip()
             if not new_comment:
-                return errorpage("Comment cannot be empty", "Error while editing comment")
+                flash("ERROR: Comment cannot be empty")
+                return redirect(f"/announcement/{announcement_id}/comment/{comment_id}/edit")
             if len(new_comment) > 1000:
-                return errorpage("Comment must be less than 1000 characters", "Error while editing comment")
+                flash("ERROR: Comment must be less than 1000 characters")
+                return redirect(f"/announcement/{announcement_id}/comment/{comment_id}/edit")
             announcements.update_comment(comment_id, new_comment)
             return redirect("/announcement/" + str(announcement_id))
         return redirect("/announcement/" + str(announcement_id))
@@ -356,6 +375,7 @@ def remove_comment(announcement_id, comment_id):
         check_csrf_token()
         if "remove" in request.form:
             announcements.remove_comment(comment_id)
+            flash("The comment has been removed!")
             return redirect("/announcement/" + str(announcement_id))
         return redirect("/announcement/" + str(announcement_id))
     return render_template("remove_comment.html", comment=comment, announcement=announcement)

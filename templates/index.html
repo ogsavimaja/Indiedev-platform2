@@ -7,6 +7,12 @@
 <p>
   Indiedev is a platform for indie game developers to share their projects and ideas.
 </p>
+{% for message in get_flashed_messages() %}
+<p>
+  <h4><b>{{ message }}</b></h4>
+</p>
+{% endfor %}
+
 <p>
   <h2>Latest announcements</h2>
   <form action="/search" method="get">
