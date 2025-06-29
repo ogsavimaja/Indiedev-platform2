@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, redirect, session, flash
+import markupsafe
 import sqlite3
+from flask import Flask, render_template, request, redirect, session, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+from secrets import token_hex
+
 import db
 import config
 import announcements
 import users
-import markupsafe
-from werkzeug.security import generate_password_hash, check_password_hash
-from secrets import token_hex
 
 
 app = Flask(__name__)
@@ -26,8 +27,10 @@ def require_login():
 
 # Check if CSRF token is valid
 def check_csrf_token():
+    if "csrf_token" not in request.form:
+        return errorpage("This action is forbidden", "Error while processing request")
     if request.form["csrf_token"] != session["csrf_token"]:
-        return errorpage("Invalid CSRF token", "Error while processing request")
+        return errorpage("This action is forbidden", "Error while processing request")
 
 
 # Allows browser to see line breaks
