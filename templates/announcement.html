@@ -91,7 +91,7 @@
 <br />
 <hr />
 {% for comment in comments %}
-<p>
+<div class="comment">
   <font size="4">{{ comment.comment | show_lines }}</font><br /><br />
   {{ comment.created_at }}<br />
   {% if comment.updated_at %}
@@ -103,7 +103,7 @@
   <a class="link" href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/edit">Edit</a> &nbsp;
   <a class="link" href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/remove">Remove</a>
   {% endif %}
-</p>
+</div>
 <hr />
 {% endfor %}
 {% endblock %}

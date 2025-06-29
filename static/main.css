@@ -7,8 +7,16 @@ body {
 }
 
 .header {
+  padding: 0.2em;
+  margin: 0.5em 0;
   background-color: rgb(37, 37, 37);
   color: white;
+}
+
+.comment {
+  border: 2px solid white;
+  margin: 1em;
+  padding: 0.2em 0.5em;
 }
 
 .link {
@@ -18,3 +26,4 @@ body {
 .link:hover {
   color: rgb(190, 110, 255);
 }
+
