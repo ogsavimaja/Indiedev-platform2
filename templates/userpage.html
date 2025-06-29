@@ -16,16 +16,16 @@
 <h2>Announcements created by {{ user.username }}</h2>
 {% for announcement in announcements %}
 <li>
-  <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
+  <a class="link" href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
 </li>
 {% endfor %}
 <h2>Feedback & Comments created by {{ user.username }}</h2>
 <hr />
 {% for comment in comments %}
 <p>
-  <a href="/announcement/{{ comment.announcement_id }}">{{ comment.comment | show_lines }}</a>
+  <a class="link" href="/announcement/{{ comment.announcement_id }}">{{ comment.comment | show_lines }}</a>
   <p>
-    Posted on: <a href="/announcement/{{ comment.announcement_id }}">{{ comment.announcement_title }}</a><br />
+    Posted on: <a class="link" href="/announcement/{{ comment.announcement_id }}">{{ comment.announcement_title }}</a><br />
     Created at: {{ comment.created_at }}
   </p>
 </p>

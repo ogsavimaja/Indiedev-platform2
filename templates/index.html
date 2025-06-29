@@ -20,9 +20,9 @@
 
   {% for announcement in announcements %}
   <p>
-    <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
+    <a class="link" href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
     <br />
-    <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a> ({{ announcement.created_at }})
+    <a class="link" href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a> ({{ announcement.created_at }})
   </p>
   <hr />
   {% endfor %}

@@ -7,8 +7,8 @@
 
 {% if session.user_id == announcement.user_id %}
 <p>
-  <a href="/announcement/{{ announcement.id }}/edit">Edit</a> &nbsp;
-  <a href="/announcement/{{ announcement.id }}/remove">Remove</a>
+  <a class="link" href="/announcement/{{ announcement.id }}/edit">Edit</a> &nbsp;
+  <a class="link" href="/announcement/{{ announcement.id }}/remove">Remove</a>
 </p>
 {% endif %}
 
@@ -19,7 +19,7 @@
 
 <p>
   <b>Author</b>:
-  <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a>
+  <a class="link" href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a>
 </p>
 
 {% for class, value in classes.items() %}
@@ -54,7 +54,7 @@
 {% if announcement.download_link %}
 <p>
   <b>Download link:</b>
-  <a href="{{ announcement.download_link }}" target="_blank" rel="noopener noreferrer">{{ announcement.download_link }}</a>
+  <a class="link" href="{{ announcement.download_link }}" target="_blank" rel="noopener noreferrer">{{ announcement.download_link }}</a>
 </p>
 {% endif %}
 
@@ -97,11 +97,11 @@
   {% if comment.updated_at %}
   Edited at: {{ comment.updated_at }}<br />
   {% endif %}
-  <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
+  <a class="link" href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
   <br />
   {% if session.user_id == comment.user_id %}
-  <a href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/edit">Edit</a> &nbsp;
-  <a href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/remove">Remove</a>
+  <a class="link" href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/edit">Edit</a> &nbsp;
+  <a class="link" href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/remove">Remove</a>
   {% endif %}
 </p>
 <hr />
