@@ -73,8 +73,14 @@ def register():
         if len(password) < 8:
             flash("ERROR: Password must be at least 8 characters long")
             return redirect("/register")
+        if " " in password:
+            flash("ERROR: Password cannot contain spaces")
+            return redirect("/register")
         if len(username) < 3:
             flash("ERROR: Username must be at least 3 characters long")
+            return redirect("/register")
+        if " " in username:
+            flash("ERROR: Username cannot contain spaces")
             return redirect("/register")
         if password != confirm_password:
             flash("ERROR: Passwords do not match")
@@ -156,7 +162,7 @@ def announcement(announcement_id):
         if not announcements.get_announcement(announcement_id):
             return errorpage("Announcement not found", "Error while loading announcement")
 
-        comment = request.form["comment"]
+        comment = request.form["comment"].strip()
         if not comment:
             flash("ERROR: Comment cannot be empty")
             return redirect("/announcement/" + str(announcement_id))
@@ -186,8 +192,8 @@ def new_announcement():
     class_types = result[1]
     if request.method == "POST":
         check_csrf_token()
-        title = request.form["title"]
-        description = request.form["description"]
+        title = request.form["title"].strip()
+        description = request.form["description"].strip()
         download_link = request.form["download_link"]
         intented_price = request.form["intented_price"]
         age_restriction = request.form["age_restriction"]
@@ -244,8 +250,8 @@ def edit_announcement(announcement_id):
     if request.method == "POST":
         check_csrf_token()
         if "confirm" in request.form:
-            title = request.form["title"]
-            description = request.form["description"]
+            title = request.form["title"].strip()
+            description = request.form["description"].strip()
             download_link = request.form["download_link"]
             intented_price = request.form["intented_price"]
             age_restriction = request.form["age_restriction"]
@@ -323,7 +329,7 @@ def edit_comment(announcement_id, comment_id):
     if request.method == "POST":
         check_csrf_token()
         if "confirm" in request.form:
-            new_comment = request.form["comment"]
+            new_comment = request.form["comment"].strip()
             if not new_comment:
                 return errorpage("Comment cannot be empty", "Error while editing comment")
             if len(new_comment) > 1000:
