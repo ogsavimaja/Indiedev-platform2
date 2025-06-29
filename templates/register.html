@@ -1,64 +1,36 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Create an account</title>
-</head>
+{% block title %}Indiedev{% endblock %}
 
-<body>
-  <header style="background-color: rgb(104, 168, 197)">
-    <h2>Indiedev</h2>
-    {% if session.username %}
-    <p>
-      <b>You are logged in as {{ session.username }}.</b>
-    </p>
-    {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
-    {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
-    {% endif %}
-    <hr />
-  </header>
-
-  <h1>Create an account</h1>
-  <font size="4">Please fill in the form to create an account.</font><br />
-  <font size="2">The username must be at least 3 characters long and the password must be at least 8 characters long.</font>
-  {% for message in get_flashed_messages() %}
+{% block content %}
+<h1>Create an account</h1>
+<font size="4">Please fill in the form to create an account.</font><br />
+<font size="2">The username must be at least 3 characters long and the password must be at least 8 characters long.</font>
+{% for message in get_flashed_messages() %}
+<p>
+  <b>{{ message }}</b>
+</p>
+{% endfor %}
+<form action="/register" method="post">
   <p>
-    <b>{{ message }}</b>
+    Email (optional): <br />
+    <input type="text" name="email" />
   </p>
-  {% endfor %}
-  <form action="/register" method="post">
-    <p>
-      Email (optional): <br />
-      <input type="text" name="email" />
-    </p>
 
-    <p>
-      Username: <br />
-      <input type="text" name="username" />
-    </p>
-
-    <p>
-      Password: <br />
-      <input type="password" name="password" />
-    </p>
-
-    <p>
-      Password again: <br />
-      <input type="password" name="confirm_password" />
-    </p>
-    <input type="submit" value="Create an account" />
-  </form>
   <p>
-    <a href="/">Back to the main page</a>
+    Username: <br />
+    <input type="text" name="username" />
   </p>
-</body>
 
-</html>
+  <p>
+    Password: <br />
+    <input type="password" name="password" />
+  </p>
+
+  <p>
+    Password again: <br />
+    <input type="password" name="confirm_password" />
+  </p>
+  <input type="submit" value="Create an account" />
+</form>
+{% endblock %}

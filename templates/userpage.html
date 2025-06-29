@@ -1,63 +1,34 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>User {{ user.username }}</title>
-</head>
+{% block title %}User {{ user.username }}{% endblock %}
 
-<body>
-  <header style="background-color: rgb(104, 168, 197)">
-    <h2>Indiedev</h2>
-    {% if session.username %}
-    <p>
-      <b>You are logged in as {{ session.username }}.</b>
-    </p>
-    {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
-    {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
-    {% endif %}
-    <hr />
-  </header>
+{% block content %}
+<h1>User {{ user.username }}</h1>
 
-  <h1>User {{ user.username }}</h1>
+<p>
+  {{ user.username }} joined our platform at: {{ user.created_at }}
+</p>
+
+<p>
+  {{ user.username }} has created {{ announcements | count }} announcements and {{ comments | count }} comments.
+</p>
+
+<h2>Announcements created by {{ user.username }}</h2>
+{% for announcement in announcements %}
+<li>
+  <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
+</li>
+{% endfor %}
+<h2>Feedback & Comments created by {{ user.username }}</h2>
+<hr />
+{% for comment in comments %}
+<p>
+  <a href="/announcement/{{ comment.announcement_id }}">{{ comment.comment | show_lines }}</a>
   <p>
-    <a href="/">Back to the main page</a>
+    Posted on: <a href="/announcement/{{ comment.announcement_id }}">{{ comment.announcement_title }}</a><br />
+    Created at: {{ comment.created_at }}
   </p>
-
-  <p>
-    {{ user.username }} joined our platform at: {{ user.created_at }}
-  </p>
-
-  <p>
-    {{ user.username }} has created {{ announcements | count }} announcements and {{ comments | count }} comments.
-  </p>
-
-  <h2>Announcements created by {{ user.username }}</h2>
-  {% for announcement in announcements %}
-  <li>
-    <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
-  </li>
-  {% endfor %}
-  <p>
-  <h2>Feedback & Comments created by {{ user.username }}</h2>
-  <hr />
-  {% for comment in comments %}
-
-    <a href="/announcement/{{ comment.announcement_id }}">{{ comment.comment | show_lines }}</a>
-    <p>
-      Posted on: <a href="/announcement/{{ comment.announcement_id }}">{{ comment.announcement_title }}</a><br />
-      Created at: {{ comment.created_at }}
-    </p>
-  </p>
-  <hr />
-  {% endfor %}
-
-</body>
-</html>
+</p>
+<hr />
+{% endfor %}
+{% endblock %}

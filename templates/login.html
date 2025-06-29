@@ -1,59 +1,30 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Login</title>
-</head>
+{% block title %}Login{% endblock %}
 
-<body>
-  <header style="background-color: rgb(104, 168, 197)">
-    <h2>Indiedev</h2>
-    {% if session.username %}
-    <p>
-      <b>You are logged in as {{ session.username }}.</b>
-    </p>
-    {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
-    {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
-    {% endif %}
-    <hr />
-  </header>
-
-  <h1>Please provide your login information</h1>
-  {% for message in get_flashed_messages() %}
+{% block content %}
+<h1>Please provide your login information</h1>
+{% for message in get_flashed_messages() %}
+<p>
+  <b>{{ message }}</b>
+</p>
+{% endfor %}
+<form action="/login" method="post">
   <p>
-    <b>{{ message }}</b>
+    Username:
+    <input type="text" name="username" />
   </p>
-  {% endfor %}
-  <form action="/login" method="post">
-    <p>
-      Username:
-      <input type="text" name="username" />
-    </p>
-
-    <p>
-      Password:
-      <input type="password" name="password" />
-    </p>
-
-    <input type="submit" value="Login" />
-  </form>
 
   <p>
-    Don't have an account?
-  <a href="/register">Create an account</a>
+    Password:
+    <input type="password" name="password" />
   </p>
-  <p>
-    <a href="/">Back to the main page</a>
-  </p>
-</body>
 
+  <input type="submit" value="Login" />
+</form>
 
-</html>
+<p>
+  Don't have an account?
+<a href="/register">Create an account</a>
+</p>
+{% endblock %}

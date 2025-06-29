@@ -1,44 +1,19 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Remove announcement</title>
-</head>
+{% block title %}Remove announcement{% endblock %}
 
-<body>
-  <header style="background-color: rgb(104, 168, 197)">
-    <h2>Indiedev</h2>
-    {% if session.username %}
-    <p>
-      <b>You are logged in as {{ session.username }}.</b>
-    </p>
-    {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
-    {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
-    {% endif %}
-    <hr />
-  </header>
+{% block content %}
+<h1>Remove announcement</h1>
 
-  <h1>Remove announcement</h1>
-
-  <form action="/announcement/{{announcement.id}}/remove" method="post">
-    <p>
-      Are you sure you want to remove announcement "{{ announcement.title }}"? 
-      <br />
-      <br />
-      This action will delete the announcement permanently and cannot be undone.
-    </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="remove" value="Remove" />
-    <input type="submit" value="Cancel" />
-  </form>
-</body>
-
-</html>
+<form action="/announcement/{{announcement.id}}/remove" method="post">
+  <p>
+    Are you sure you want to remove announcement "{{ announcement.title }}"? 
+    <br />
+    <br />
+    This action will delete the announcement permanently and cannot be undone.
+  </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" name="remove" value="Remove" />
+  <input type="submit" value="Cancel" />
+</form>
+{% endblock %}

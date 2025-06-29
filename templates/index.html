@@ -1,53 +1,30 @@
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Indiedev</title>
-</head>
+{% block title %}Indiedev{% endblock %}
 
-<body>
-  <header style="background-color: rgb(104, 168, 197)">
-    <h2>Indiedev</h2>
-    {% if session.username %}
+{% block content %}
+<h1>Welcome to Indiedev!</h1>
+<p>
+  Indiedev is a platform for indie game developers to share their projects and ideas.
+</p>
+<p>
+  <h2>Latest announcements</h2>
+  <form action="/search" method="get">
     <p>
-      <b>You are logged in as {{ session.username }}.</b>
+      Search from all announcements:
+      <input type="text" name="query" />
     </p>
-    {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
-    {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
-    {% endif %}
-    <hr />
-  </header>
+    <input type="submit" value="Search" />
+  </form>
+  <hr />
 
-  <h1>Welcome to Indiedev!</h1>
+  {% for announcement in announcements %}
   <p>
-    Indiedev is a platform for indie game developers to share their projects and ideas.
-  <p>
-    <h2>Latest announcements</h2>
-    <form action="/search" method="get">
-      <p>
-        Search from all announcements:
-        <input type="text" name="query" />
-      </p>
-      <input type="submit" value="Search" />
-    </form>
-    <hr />
-
-    {% for announcement in announcements %}
-    <p>
-      <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
-      <br />
-      <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a> ({{ announcement.created_at }})
-    </p>
-    <hr />
-    {% endfor %}
+    <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
+    <br />
+    <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a> ({{ announcement.created_at }})
   </p>
-</body>
-
-</html>
+  <hr />
+  {% endfor %}
+</p>
+{% endblock %}

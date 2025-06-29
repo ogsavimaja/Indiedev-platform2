@@ -23,6 +23,7 @@ def require_login():
     if not session.get("username"):
         return redirect("/login")
 
+
 # Check if CSRF token is valid
 def check_csrf_token():
     if request.form["csrf_token"] != session["csrf_token"]:

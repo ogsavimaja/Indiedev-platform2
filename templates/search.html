@@ -1,67 +1,40 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Search announcements</title>
-</head>
+{% block title %}Search announcements{% endblock %}
 
-<body>
-  <header style="background-color: rgb(104, 168, 197)">
-    <h2>Indiedev</h2>
-    {% if session.username %}
-    <p>
-      <b>You are logged in as {{ session.username }}.</b>
-    </p>
+{% block content %}
+<h1>Search from all announcements</h1>
+<form action="/search" method="get">
+  <p>
+    Search word:
+    {% if query %}
+    <input type="text" name="query" value="{{ query }}" />
+    {% else %}
+    <input type="text" name="query" />
     {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
-    {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
-    {% endif %}
-    <hr />
-  </header>
-
-  <h1>Search from all announcements</h1>
-  <a href="/">Back to the main page</a>
+  </p>
+  <input type="submit" value="Search" />
+</form>
+<br />
+<h2>Search results</h2>
+{% if not results %}
+<hr />
+<p>
+No results found.
+</p>
+{% else %}
+<p>
+  Found {{ results|length }} results.
+</p>
+<hr />
+{% for announcement in results %}
+<p>
+  <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
   <br />
-  <form action="/search" method="get">
-    <p>
-      Search word:
-      {% if query %}
-      <input type="text" name="query" value="{{ query }}" />
-      {% else %}
-      <input type="text" name="query" />
-      {% endif %}
-    </p>
-    <input type="submit" value="Search" />
-  </form>
-  <br />
-  <h2>Search results</h2>
-  {% if not results %}
-  <hr />
-  <p>
-  No results found.
-  </p>
-  {% else %}
-  <p>
-    Found {{ results|length }} results.
-  </p>
-  <hr />
-  {% for announcement in results %}
-  <p>
-    <a href="/announcement/{{ announcement.id }}">{{ announcement.title }}</a>
-    <br />
-    {{ announcement.username }} ({{ announcement.created_at }})
-  </p>
-  <hr />
-  {% endfor %}
-  {% endif %}
-  </p>
-</body>
-
-</html>
+  {{ announcement.username }} ({{ announcement.created_at }})
+</p>
+<hr />
+{% endfor %}
+{% endif %}
+</p>
+{% endblock %}

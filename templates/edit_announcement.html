@@ -1,42 +1,19 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Edit announcement</title>
-</head>
+{% block title %}Edit announcement{% endblock %}
 
-<body>
-  <header style="background-color: rgb(104, 168, 197)">
-    <h2>Indiedev</h2>
-    {% if session.username %}
-    <p>
-      <b>You are logged in as {{ session.username }}.</b>
-    </p>
-    {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
-    {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
-    {% endif %}
-    <hr />
-  </header>
+{% block content %}
+<h1>Edit announcement</h1>
+<font size="3">The spots marked with * are mandatory</font><br />
 
-  <h1>Edit announcement</h1>
-  <font size="3">The spots marked with * are mandatory</font><br />
+<form action="/announcement/{{announcement.id}}/edit" method="post">
+  <p>
+    Name of the game*: <br />
+    <input type="text" name="title" maxlength="70" value="{{ announcement.title }}"/>
+  </p>
 
-  <form action="/announcement/{{announcement.id}}/edit" method="post">
-    <p>
-      Name of the game*: <br />
-      <input type="text" name="title" maxlength="70" value="{{ announcement.title }}"/>
-    </p>
-
-{% for class in classes %}
-    <p>
+  {% for class in classes %}
+  <p>
     {{ class }}{% if class == "State" %}*{% endif %}: <br />
     {% if class_types[class] == "select" %}
     <select name="{{ class }}">
@@ -59,32 +36,30 @@
     {% endif %}
     {% endfor %}
     {% endif %}
-    </p>
-    {% endfor %}
+  </p>
+  {% endfor %}
 
-    <p>
-      Link to download site: <br />
-      <input type="text" name="download_link" value="{{ announcement.download_link }}"/>
-    </p>
+  <p>
+    Link to download site: <br />
+    <input type="text" name="download_link" value="{{ announcement.download_link }}"/>
+  </p>
 
-    <p>
-      Intented price: <br />
-      <input type="text" name="intented_price" value="{{ announcement.intented_price }}" /> €
-    </p>
+  <p>
+    Intented price: <br />
+    <input type="text" name="intented_price" value="{{ announcement.intented_price }}" /> €
+  </p>
 
-    <p>
-      Intented age restriction: <br />
-      <input type="text" name="age_restriction" value="{{ announcement.intented_age_restriction }}" />
-    </p>
+  <p>
+    Intented age restriction: <br />
+    <input type="text" name="age_restriction" value="{{ announcement.intented_age_restriction }}" />
+  </p>
 
-    <p>
-      Description*: <br />
-      <textarea name="description" rows="6" cols="60" maxlength="1000">{{ announcement.about }}</textarea>
-    </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="confirm" value="Confirm changes" />
-    <input type="submit" value="Cancel" />
-  </form>
-</body>
-
-</html>
+  <p>
+    Description*: <br />
+    <textarea name="description" rows="6" cols="60" maxlength="1000">{{ announcement.about }}</textarea>
+  </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" name="confirm" value="Confirm changes" />
+  <input type="submit" value="Cancel" />
+</form>
+{% endblock %}

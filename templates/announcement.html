@@ -1,137 +1,109 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ announcement.title }}</title>
-</head>
+{% block title %}{{ announcement.title }}{% endblock %}
 
-<body>
-  <header style="background-color: rgb(104, 168, 197)">
-    <h2>Indiedev</h2>
-    {% if session.username %}
-    <p>
-      <b>You are logged in as {{ session.username }}.</b>
-    </p>
-    {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
-    {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
-    {% endif %}
-    <hr />
-  </header>
+{% block content %}
+<h1>{{ announcement.title }}</h1>
 
-  <h1>{{ announcement.title }}</h1>
+{% if session.user_id == announcement.user_id %}
+<p>
+  <a href="/announcement/{{ announcement.id }}/edit">Edit</a> &nbsp;
+  <a href="/announcement/{{ announcement.id }}/remove">Remove</a>
+</p>
+{% endif %}
 
-  {% if session.user_id == announcement.user_id %}
-  <p>
-    <a href="/announcement/{{ announcement.id }}/edit">Edit</a> &nbsp;
-    <a href="/announcement/{{ announcement.id }}/remove">Remove</a>
-  </p>
-  {% endif %}
+<p>
+  <b>Description:</b> <br />
+  {{ announcement.about | show_lines}}
+<p>
 
-  <p>
-    <b>Description:</b> <br />
-    {{ announcement.about | show_lines}}
-  <p>
+<p>
+  <b>Author</b>:
+  <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a>
+</p>
 
-  <p>
-    <b>Author</b>:
-    <a href="/user/{{ announcement.user_id }}">{{ announcement.username }}</a>
-  </p>
-
-  {% for class, value in classes.items() %}
-  <p>
-    {% if lengths[class]==1 %}
-    <b>{{ class }}:</b> {{ value[0] }}
-    {% else %}
-    <b>{{ class }}:</b> 
-    <ul>
-    {% for entry in value %}
-    <li>{{ entry }}</li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-  </p>
+{% for class, value in classes.items() %}
+<p>
+  {% if lengths[class]==1 %}
+  <b>{{ class }}:</b> {{ value[0] }}
+  {% else %}
+  <b>{{ class }}:</b> 
+  <ul>
+  {% for entry in value %}
+  <li>{{ entry }}</li>
   {% endfor %}
-
-  {% if announcement.intented_price %}
-  <p>
-    <b>Intended price:</b>
-    {{ announcement.intented_price }} €
-  </p>
+  </ul>
   {% endif %}
+</p>
+{% endfor %}
 
-  {% if announcement.intented_age_restriction %}
-  <p>
-    <b>Intended age restriction:</b>
-    {{ announcement.intented_age_restriction }}
-  </p>
-  {%endif%}
+{% if announcement.intented_price %}
+<p>
+  <b>Intended price:</b>
+  {{ announcement.intented_price }} €
+</p>
+{% endif %}
 
-  {% if announcement.download_link %}
+{% if announcement.intented_age_restriction %}
+<p>
+  <b>Intended age restriction:</b>
+  {{ announcement.intented_age_restriction }}
+</p>
+{%endif%}
+
+{% if announcement.download_link %}
+<p>
+  <b>Download link:</b>
+  <a href="{{ announcement.download_link }}" target="_blank" rel="noopener noreferrer">{{ announcement.download_link }}</a>
+</p>
+{% endif %}
+
+<p>
+  <b>Post date:</b>
+  {{ announcement.created_at }}
+</p>
+
+{% if announcement.updated_at %}
+<p>
+  <b>Last update:</b>
+  {{ announcement.updated_at }}
+</p>
+{% endif %}
+
+<br /><br />
+<hr />
+<h2>Feedback & Comments</h2>
+{% if session.user_id %}
+<p>New feedback/comment:</p>
+{% for message in get_flashed_messages() %}
+<p>
+  <b>{{ message }}</b>
+</p>
+{% endfor %}
+<form action="/announcement/{{ announcement.id }}" method="post">
   <p>
-    <b>Download link:</b>
-    <a href="{{ announcement.download_link }}" target="_blank" rel="noopener noreferrer">{{ announcement.download_link }}</a>
+    <textarea name="comment" rows="6" cols="60" maxlength="1000"></textarea>
   </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" value="Add a comment" />
+</form>
+{% endif %}
+<br />
+<hr />
+{% for comment in comments %}
+<p>
+  <font size="4">{{ comment.comment | show_lines }}</font><br /><br />
+  {{ comment.created_at }}<br />
+  {% if comment.updated_at %}
+  Edited at: {{ comment.updated_at }}<br />
   {% endif %}
-
-  <p>
-    <b>Post date:</b>
-    {{ announcement.created_at }}
-  </p>
-
-  {% if announcement.updated_at %}
-  <p>
-    <b>Last update:</b>
-    {{ announcement.updated_at }}
-  </p>
-  {% endif %}
-
-  <p>
-    <a href="/">Back to the main page</a>
-  </p>
-  <br /><br />
-  <hr />
-  <h2>Feedback & Comments</h2>
-  {% if session.user_id %}
-  <p>New feedback/comment:</p>
-  {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
-  {% endfor %}
-  <form action="/announcement/{{ announcement.id }}" method="post">
-    <p>
-      <textarea name="comment" rows="6" cols="60" maxlength="1000"></textarea>
-    </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Add a comment" />
-  </form>
-  {% endif %}
+  <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
   <br />
-  <hr />
-  {% for comment in comments %}
-  <p>
-    <font size="4">{{ comment.comment | show_lines }}</font><br /><br />
-    {{ comment.created_at }}<br />
-    {% if comment.updated_at %}
-    Edited at: {{ comment.updated_at }}<br />
-    {% endif %}
-    <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
-    <br />
-    {% if session.user_id == comment.user_id %}
-    <a href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/edit">Edit</a> &nbsp;
-    <a href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/remove">Remove</a>
-    {% endif %}
-  </p>
-  <hr />
-  {% endfor %}
-</body>
-
-</html>
+  {% if session.user_id == comment.user_id %}
+  <a href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/edit">Edit</a> &nbsp;
+  <a href="/announcement/{{ announcement.id }}/comment/{{ comment.id }}/remove">Remove</a>
+  {% endif %}
+</p>
+<hr />
+{% endfor %}
+{% endblock %}
