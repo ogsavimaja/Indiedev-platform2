@@ -1,16 +1,6 @@
 # Indiedev-platform2
 
-This app is a newer, more advanced version of the older Indiedev-platform. This version will have more advanced features such as ability to add pictures, fancier layout, better sorting of posts, csrf protection and usage of indexing of the database.
-
-
-## Features
-This improved app will share many of the basic functionalities of it's predecessor such as:
-* Ability to create an account and use it to log in
-* Ability to add, see, edit and delete posts
-* Ability to search posts with a keyword or by other means
-* The app has user pages which show statistics and project posts added by the user
-* User can choose one or more classes for their project post. Possible classes are in the database
-* User can send reviews/comments to other users's project posts which are shown in the app
+This app is a newer, more advanced version of the older Indiedev-platform. This version has more advanced features such as fancier layout using CSS, csrf protection, improved error handling, visible breaklines on browser and usage of indexing of the database.
 
 ## Why to use Indiedev
 The reasons are all the same than with the older version but with added features :)
@@ -20,7 +10,7 @@ This app is intended to be used by indie game developers who can share their wor
 The other good side of using this app is that it lets developers to comment each others projects, plan ideas and planned price of the game way before full release of their games. This helps the lauch of the game go as smoothly as possible with the best price, development roadmap and quality of the game possible.
 
 
-## Current status
+## Features
 Currently in the app there are functionalities for the following tasks:
 * Creating an account
 * Logging in and out
@@ -32,7 +22,6 @@ Currently in the app there are functionalities for the following tasks:
 * Inspecting userpages that show statistics about corresponding user and their announcements and comments
 
 The app also has protection against CSRF-attacks, SQL-injection and XSS-attacks. All of the saved passwords stored in the database are salted before hashing for vastly added rainbow table attack resistance and slightly added dictionary/bruteforce attack resistance in case of database breach. On top of that there is also improved errorhandling for most common types of errors that could lead to the app "crashing". Errors regarding forms that user has filled are shown on the same page as the form where favorable.
-
 
 ## How to use
 1. Download the repository.<br/>
