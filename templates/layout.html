@@ -3,29 +3,29 @@
 
 <head>
   <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  <header style="background-color: rgb(104, 168, 197)">
+  <div class="header">
     <h2>Indiedev</h2>
     {% if session.username %}
     <p>
       <b>You are logged in as {{ session.username }}.</b>
     </p>
     {% endif %}
-    |<a href="/">Home</a>&nbsp|&nbsp
-    <a href="/search">Search</a>&nbsp|&nbsp
+    |<a class="link" href="/">Home</a>&nbsp|&nbsp
+    <a class="link" href="/search">Search</a>&nbsp|&nbsp
     {% if session.user_id %}
-    <a href="/new_announcement">Create a new post</a>&nbsp|&nbsp
-    <a href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
-    <a href="/logout">Log out</a>&nbsp|
-    {% else %} 
-    <a href="/register">Create an account</a>&nbsp|&nbsp
-    <a href="/login">Login</a>&nbsp|
+    <a class="link" href="/new_announcement">Create a new post</a>&nbsp|&nbsp
+    <a class="link" href="/user/{{ session.user_id }}">Your user page</a>&nbsp|&nbsp
+    <a class="link" href="/logout">Log out</a>&nbsp|
+    {% else %}
+    <a class="link" href="/register">Create an account</a>&nbsp|&nbsp
+    <a class="link" href="/login">Login</a>&nbsp|
     {% endif %}
     <hr />
-  </header>
-
+  </div>
   {% block content %}{% endblock %}
 </body>
 
